@@ -1,0 +1,106 @@
+[
+  {
+    "project_id": "test_proj_123",
+    "problem_statement": "Design a portable solar-powered water purifier",
+    "morphological_alternatives": {
+      "Power Source": "Solar Panel",
+      "Filtration": "Reverse Osmosis",
+      "Pump": "DC Water Pump"
+    },
+    "current_phase": "risk_analysis",
+    "validation_feedback": "",
+    "revision_count": 0
+  },
+  {
+    "project_id": "test_proj_123",
+    "problem_statement": "Design a portable solar-powered water purifier",
+    "morphological_alternatives": {
+      "Power Source": "Solar Panel",
+      "Filtration": "Reverse Osmosis",
+      "Pump": "DC Water Pump"
+    },
+    "risk_checklist": {
+      "risks": [
+        {
+          "risk_category": "Electrical",
+          "cause": "Insufficient solar panel power output",
+          "trade_off": "Solar panel size vs. system portability"
+        },
+        {
+          "risk_category": "Mechanical",
+          "cause": "Reverse osmosis membrane fouling",
+          "trade_off": "Membrane replacement frequency vs. system maintenance cost"
+        },
+        {
+          "risk_category": "Mechanical",
+          "cause": "DC water pump failure",
+          "trade_off": "Pump reliability vs. system cost"
+        },
+        {
+          "risk_category": "Thermal",
+          "cause": "High thermal loads on electrical components",
+          "trade_off": "Heat sink size vs. system portability"
+        },
+        {
+          "risk_category": "Manufacturing",
+          "cause": "Manufacturing defects in pump or filtration systems",
+          "trade_off": "Manufacturing process quality vs. system cost"
+        },
+        {
+          "risk_category": "Integration",
+          "cause": "Incompatibility between system components",
+          "trade_off": "Component standardization vs. system customization"
+        }
+      ]
+    },
+    "current_phase": "risk_analysis",
+    "validation_feedback": "",
+    "revision_count": 1
+  },
+  {
+    "project_id": "test_proj_123",
+    "problem_statement": "Design a portable solar-powered water purifier",
+    "morphological_alternatives": {
+      "Power Source": "Solar Panel",
+      "Filtration": "Reverse Osmosis",
+      "Pump": "DC Water Pump"
+    },
+    "risk_checklist": {
+      "risks": [
+        {
+          "risk_category": "Electrical",
+          "cause": "Insufficient solar panel power output",
+          "trade_off": "Solar panel size vs. system portability"
+        },
+        {
+          "risk_category": "Mechanical",
+          "cause": "Reverse osmosis membrane fouling",
+          "trade_off": "Membrane replacement frequency vs. system maintenance cost"
+        },
+        {
+          "risk_category": "Mechanical",
+          "cause": "DC water pump failure",
+          "trade_off": "Pump reliability vs. system cost"
+        },
+        {
+          "risk_category": "Thermal",
+          "cause": "High thermal loads on electrical components",
+          "trade_off": "Heat sink size vs. system portability"
+        },
+        {
+          "risk_category": "Manufacturing",
+          "cause": "Manufacturing defects in pump or filtration systems",
+          "trade_off": "Manufacturing process quality vs. system cost"
+        },
+        {
+          "risk_category": "Integration",
+          "cause": "Incompatibility between system components",
+          "trade_off": "Component standardization vs. system customization"
+        }
+      ]
+    },
+    "current_phase": "risk_analysis",
+    "validation_feedback": "",
+    "revision_count": 1
+  }
+]

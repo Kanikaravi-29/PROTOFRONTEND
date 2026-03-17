@@ -21,7 +21,7 @@ generator_llm = ChatGroq(temperature=0.7, model_name="llama-3.3-70b-versatile", 
 generator_with_tools = generator_llm.bind_tools([FMEA_Lookup])
 
 generator_prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a Risk Analyst. Identify early engineering risks and trade-offs based on the physical solution mechanisms selected. Rules:\n1) Focus strictly on Mechanical, Electrical, Thermal, Manufacturing, and Integration domains.\n2) Reject generic business/market risks.\n3) Clearly identify an engineering cause and the related design trade-off.\nYou can use FMEA_Lookup tool to get standard risk categories."),
+    ("system", "You are a Risk Analyst. Identify early engineering risks and trade-offs based on the physical solution mechanisms selected. Rules:\n1) Focus strictly on Mechanical, Electrical, Thermal, Manufacturing, and Integration domains.\n2) Reject generic business/market risks.\n3) Clearly identify an engineering cause and the related design trade-off.\n4) Generate AT LEAST ONE specific valid risk.\nYou can use FMEA_Lookup tool to get standard risk categories."),
     ("human", "Problem Statement: {problem_statement}\nMorphological Chart (Selected Options): {morphological_alternatives}\n\nValidation Feedback (if any): {validation_feedback}\n\nPlease generate the risk checklist.")
 ])
 
@@ -31,7 +31,7 @@ phase3_generator = generator_prompt | generator_with_tools.with_structured_outpu
 validator_llm = ChatGroq(temperature=0.0, model_name="llama-3.1-8b-instant", groq_api_key=settings.GROQ_API_KEY)
 
 validator_prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are an Engineering Validator. Evaluate the structured engineering risk checklist. Rules to check:\n1) No generic business or market risks (must be engineering specific).\n2) Must have a clear engineering cause.\n3) Must clearly identify a trade-off.\nIf valid, return is_valid=True and empty feedback. If invalid, return is_valid=False and detail the exact violations."),
+    ("system", "You are an Engineering Validator. Evaluate the structured engineering risk checklist. Rules to check:\n1) No generic business or market risks (must be engineering specific).\n2) Must have a clear engineering cause.\n3) Must clearly identify a trade-off.\n4) The risk checklist MUST contain at least one valid risk.\nIf valid, return is_valid=True and empty feedback. If invalid, return is_valid=False and detail the exact violations."),
     ("human", "Risk Checklist JSON to validate: {risk_checklist}")
 ])
 

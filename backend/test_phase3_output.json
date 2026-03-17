@@ -1,0 +1,19 @@
+{
+  "state": {
+    "project_id": "2050754e-c6c4-482b-af31-509cf5f03d47",
+    "problem_statement": "test problem",
+    "risk_checklist": {
+      "risks": [
+        {
+          "risk_category": "Thermal",
+          "cause": "Insufficient cooling",
+          "trade_off": "Heat dissipation vs. system size"
+        }
+      ]
+    },
+    "current_phase": "risk_analysis",
+    "validation_feedback": "",
+    "revision_count": 1
+  },
+  "status": "completed"
+}
