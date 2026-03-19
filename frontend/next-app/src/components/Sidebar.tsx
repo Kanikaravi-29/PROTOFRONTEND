@@ -1,79 +1,160 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { ChevronRight, Plus } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { 
+    Plus, 
+    FileText, 
+    Settings, 
+    User, 
+    ChevronUp, 
+    ChevronDown,
+    LayoutDashboard
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getRecentProjects } from '@/lib/api';
 
-const phases = [
-    { number: 1, name: 'Functional decomposition', path: '/phases/phase-1' },
-    { number: 2, name: 'Morphological Analysis', path: '/phases/phase-2' },
-    { number: 3, name: 'Risk Analysis', path: '/phases/phase-3' },
-    { number: 4, name: 'Report', path: '/phases/phase-4' },
-];
+type Project = {
+    id: string;
+    problem_statement: string;
+    created_at: string;
+};
 
 export function Sidebar() {
-    const pathname = usePathname();
+    const router = useRouter();
     const searchParams = useSearchParams();
-    const projectId = searchParams.get('projectId');
+    const currentProjectId = searchParams.get('projectId');
+    
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProjects() {
+            try {
+                const data = await getRecentProjects(15);
+                setProjects(data);
+            } catch (err) {
+                console.error("Failed to load projects", err);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProjects();
+    }, []);
+
+    const handleNewProject = () => {
+        router.push('/');
+    };
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    };
 
     return (
-        <aside className="w-72 border-r border-border bg-card flex flex-col h-full">
+        <aside className="w-72 border-r border-zinc-200 bg-white flex flex-col h-full shadow-sm">
             {/* Logo */}
-            <div className="p-6 border-b border-border">
-                <Link href="/" className="block">
-                    <h1 className="text-2xl font-semibold">ProtoStruc</h1>
-                    <p className="text-sm text-muted-foreground mt-1">Project Workflow</p>
-                </Link>
+            <div className="p-6 flex items-center gap-3">
+                <div className="bg-zinc-900 rounded-lg p-2">
+                    <FileText className="h-6 w-6 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">ProtoStruc</h1>
             </div>
 
-            {/* Phase Navigation */}
-            <div className="flex-1 p-6">
-                <div className="mb-4 flex items-center justify-between">
-                    <h2 className="font-medium">Phases</h2>
-                    <Button size="icon" variant="ghost" className="h-6 w-6">
-                        <Plus className="h-4 w-4" />
-                    </Button>
+            <div className="px-5 mb-6">
+                <Button 
+                    onClick={handleNewProject}
+                    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-bold py-6 rounded-xl flex items-center justify-center gap-2 text-lg shadow-lg shadow-zinc-200 transition-all active:scale-[0.98]"
+                >
+                    <Plus className="h-5 w-5 stroke-[3px]" />
+                    New Project
+                </Button>
+            </div>
+
+            {/* Recent Projects Section */}
+            <div className="flex-1 flex flex-col min-h-0">
+                <div className="px-6 py-2 flex items-center justify-between">
+                    <h3 className="text-[11px] font-black text-zinc-400 uppercase tracking-[0.2em]">
+                        Recent Projects
+                    </h3>
+                    <ChevronUp className="h-4 w-4 text-zinc-300" />
                 </div>
 
-                <nav className="space-y-2">
-                    {phases.map((phase) => {
-                        const isActive = pathname === phase.path;
-                        const href = projectId ? `${phase.path}?projectId=${projectId}` : phase.path;
-                        return (
-                            <Link
-                                key={phase.number}
-                                href={href}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'hover:bg-accent text-foreground'
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-3 space-y-1 py-2">
+                    {loading ? (
+                        <div className="px-4 py-3 text-sm text-zinc-400 font-medium animate-pulse">Loading...</div>
+                    ) : projects.length === 0 ? (
+                        <div className="px-4 py-3 text-sm text-zinc-400 font-medium italic">No projects yet</div>
+                    ) : (
+                        projects.map((project) => {
+                            const isActive = currentProjectId === project.id;
+                            return (
+                                <Link
+                                    key={project.id}
+                                    href={`/phases/all?projectId=${project.id}`}
+                                    className={`flex items-start gap-3 p-3 rounded-xl transition-all group ${
+                                        isActive 
+                                            ? 'bg-zinc-100' 
+                                            : 'hover:bg-zinc-50'
                                     }`}
-                            >
-                                <div className="flex items-center gap-3 flex-1">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-current font-medium">
-                                        {phase.number}
+                                >
+                                    <div className={`mt-0.5 p-1.5 rounded-lg transition-colors ${
+                                        isActive ? 'bg-zinc-900 text-white' : 'bg-transparent text-zinc-400 group-hover:text-zinc-600'
+                                    }`}>
+                                        <FileText className="h-4 w-4" />
                                     </div>
-                                    <span className="font-medium">{phase.name}</span>
-                                </div>
-                                <ChevronRight className="h-4 w-4" />
-                            </Link>
-                        );
-                    })}
-                </nav>
+                                    <div className="flex-1 min-w-0">
+                                        <div className={`text-sm font-bold truncate leading-tight mb-0.5 ${
+                                            isActive ? 'text-zinc-900' : 'text-zinc-600 group-hover:text-zinc-900'
+                                        }`}>
+                                            {project.problem_statement || 'Untitled Project'}
+                                        </div>
+                                        <div className="text-[10px] font-bold text-zinc-400 tracking-wider">
+                                            {formatDate(project.created_at)}
+                                        </div>
+                                    </div>
+                                </Link>
+                            );
+                        })
+                    )}
+                </div>
             </div>
 
-            {/* User Profile */}
-            <div className="p-6 border-t border-border">
-                <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-medium">
-                        JD
-                    </div>
-                    <div className="flex-1">
-                        <div className="font-medium">John Doe</div>
-                        <div className="text-sm text-muted-foreground">Admin</div>
+            {/* Footer */}
+            <div className="p-4 border-t border-zinc-100 mt-auto bg-zinc-50/50">
+                <div className="space-y-1">
+                    <button className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80 rounded-xl transition-all group">
+                        <Settings className="h-5 w-5 text-zinc-400 group-hover:text-zinc-900" />
+                        Settings
+                    </button>
+                    <div className="flex items-center gap-3 px-4 py-3">
+                        <div className="h-9 w-9 rounded-full bg-zinc-900 text-white flex items-center justify-center font-black text-xs">
+                            JD
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="text-sm font-bold text-zinc-900 truncate">John Doe</div>
+                            <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Admin</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <style jsx global>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #e4e4e7;
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #d4d4d8;
+                }
+            `}</style>
         </aside>
     );
 }

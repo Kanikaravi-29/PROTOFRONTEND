@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
 
 // Since the backend uses "get_current_user" with a dummy or actual user, we'll
 // mock a user authentication header for now if needed, though testing locally might just bypass it.

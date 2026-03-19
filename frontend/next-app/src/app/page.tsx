@@ -15,6 +15,8 @@ type Project = {
   created_at: string;
 };
 
+import { Sidebar } from "@/components/Sidebar";
+
 export default function Home() {
   const router = useRouter();
   const [productIdea, setProductIdea] = useState('');
@@ -42,7 +44,7 @@ export default function Home() {
     try {
       setIsSubmitting(true);
       const project = await createProject(productIdea);
-      router.push(`/phases/phase-1?projectId=${project.id}`);
+      router.push(`/phases/all?projectId=${project.id}`);
     } catch (error) {
       console.error('Error creating project:', error);
       alert('Failed to create project. Please ensure backend is running.');
@@ -52,70 +54,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
-      {/* Sidebar */}
-      <aside className="w-72 border-r border-border bg-card flex flex-col">
-        {/* Logo */}
-        <div className="p-6 border-b border-border flex items-center gap-2">
-          <FileText className="h-6 w-6" />
-          <h1 className="text-xl font-semibold">ProtoStruc</h1>
-        </div>
-
-        {/* New Project Button */}
-        <div className="p-4 border-b border-border">
-          <Button className="w-full gap-2" size="lg">
-            <Plus className="h-4 w-4" />
-            New Project
-          </Button>
-        </div>
-
-        {/* Recent Projects */}
-        <div className="flex-1 overflow-auto p-4">
-          <h3 className="text-xs font-medium text-muted-foreground uppercase mb-3 px-2">
-            Recent Projects
-          </h3>
-          <div className="space-y-1">
-            {loadingProjects ? (
-              <div className="px-3 py-2 text-sm text-muted-foreground">Loading...</div>
-            ) : projects.length === 0 ? (
-              <div className="px-3 py-2 text-sm text-muted-foreground">No recent projects</div>
-            ) : (
-              projects.map((project) => (
-                <button
-                  key={project.id}
-                  onClick={() => router.push(`/phases/phase-4?projectId=${project.id}`)}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-accent transition-colors group"
-                >
-                  <div className="flex items-start gap-2">
-                    <FileText className="h-4 w-4 mt-0.5 text-muted-foreground" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">
-                        {project.problem_statement || 'Untitled Project'}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(project.created_at).toLocaleDateString()}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="p-4 border-t border-border space-y-1">
-          <Button variant="ghost" className="w-full justify-start gap-3">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3">
-            <User className="h-4 w-4" />
-            Profile
-          </Button>
-        </div>
-      </aside>
-
+    <div className="flex h-screen bg-[#FDFCFB] text-foreground">
+      <Sidebar />
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         <div className="max-w-4xl mx-auto p-8 py-16">
@@ -174,7 +114,7 @@ export default function Home() {
                 {projects.slice(0, 4).map((project) => (
                   <Card
                     key={project.id}
-                    onClick={() => router.push(`/phases/phase-4?projectId=${project.id}`)}
+                    onClick={() => router.push(`/phases/all?projectId=${project.id}`)}
                     className="hover:shadow-md transition-shadow cursor-pointer"
                   >
                     <CardContent className="p-5">
